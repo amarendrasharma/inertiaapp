@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Post;
+use App\{Post, Category};
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -19,7 +19,14 @@ class PostController extends Controller
 
     public function create()
     {
-        return Inertia::render('Post/Create');
+        $categories = Category::select('category_name', 'id')->get();
+        $categories =  $categories->map(function ($category) {
+            return [
+                'label' => $category->category_name,
+                'value' => $category->id
+            ];
+        });
+        return Inertia::render('Post/Create', compact('categories'));
     }
 
     /**
@@ -33,18 +40,20 @@ class PostController extends Controller
         $this->validate($request, [
             'title' => ['required', 'max:255'],
             'description' => ['required', 'max:255'],
-            'image' => ['required', 'image']
+            'image' => ['required', 'image'],
+            'category_id' => ['required']
         ]);
         if ($request->file('image')) {
             $file_name = $request->file('image')->store('post');
         } else {
             $file_name = null;
         }
-        $post_created = Post::create(
+        Post::create(
             [
                 'uuid' => Str::uuid(),
                 'title' => $request->title,
                 'slug' => Str::slug($request->title),
+                'category_id' => $request->category_id,
                 'image' => $file_name,
                 'description' => $request->description,
             ]
@@ -53,48 +62,59 @@ class PostController extends Controller
         return redirect()->back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(Post $post)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Post $post)
     {
-        //
+        $post->load('category');
+        $categories = Category::select('category_name', 'id')->get();
+        $categories =  $categories->map(function ($category) {
+            return [
+                'label' => $category->category_name,
+                'value' => $category->id
+            ];
+        });
+        return Inertia::render('Post/Edit', compact('post', 'categories'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, Post $post)
     {
-        //
+        // dd($request);
+        $this->validate($request, [
+            'title' => ['required', 'max:255'],
+            'description' => ['required', 'max:255'],
+            'image' => ['nullable', 'image'],
+            'category_id' => ['required']
+        ]);
+        if ($request->file('image')) {
+            $file_name = $request->file('image')->store('post');
+            $post->image = $file_name;
+            $post->save();
+        }
+        $input = $request->except(['image']);
+        $post->fill($input);
+        $post->save();
+        session()->flash('success', 'Post Updated');
+        return redirect('/posts');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
+    public function imageDelete(Post $post)
+    {
+        $post->image = null;
+        $post->save();
+        session()->flash('success', 'Image Deleted');
+        return back();
+    }
+
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        session()->flash('success', 'Post Deleted');
+        return redirect()->back();
     }
 }

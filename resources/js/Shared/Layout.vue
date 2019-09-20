@@ -76,11 +76,11 @@
 								class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-blue-600"
 								href="#"
 							>Admin Panel</a>
-							<a
+							<inertia-link
 								class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-blue-600"
-								href="#"
-								@click.prevent="logout"
-							>Logout</a>
+								href="/logout"
+								method="post"
+							>Logout</inertia-link>
 						</div>
 					</template>
 				</dropdown>

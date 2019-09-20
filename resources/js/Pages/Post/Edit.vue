@@ -1,6 +1,6 @@
 <template>
 	<layout>
-		<inertia-link href="/posts" class="text-lg text-gray-600 mb-4 inline-block">Back</inertia-link>
+		{{post}}
 		<card with-footer>
 			<text-input
 				v-model="post.title"
@@ -10,7 +10,7 @@
 				@keydown="delete errors.title"
 			></text-input>
 			<select-input
-				v-model="post.category"
+				v-model="post.category_id"
 				label="Select Category"
 				:options="categories"
 				class="w-64 mb-4"
@@ -26,7 +26,13 @@
 				:errors="errors.description"
 				@keydown="delete errors.description"
 			></textarea-input>
-			<file-input v-model="post.image" label="Post Image" :errors="errors.image"></file-input>
+			<template v-if="post.image">
+				<img :src="post.image_full_path" />
+				<loading-button ref="deleteImageBtn" @click.prevent="deleteImage" variant="danger">Delete Image</loading-button>
+			</template>
+			<template v-else>
+				<file-input v-model="image" label="Post Image" :errors="errors.image"></file-input>
+			</template>
 			<template #footer>
 				<loading-button ref="submitButton" @click="postCreate">Save Article</loading-button>
 			</template>
@@ -51,12 +57,10 @@ export default {
 		LoadingButton,
 		SelectInput
 	},
-	props: ["errors", "categories"],
+	props: ["errors", "categories", "post"],
 	data() {
 		return {
-			post: {
-				category: null
-			}
+			image: null
 		};
 	},
 	methods: {
@@ -67,17 +71,26 @@ export default {
 			let form = new FormData();
 			form.append("title", this.post.title || "");
 			form.append("description", this.post.description || "");
-			form.append("image", this.post.image || "");
-			form.append("category_id", this.post.category || "");
+			form.append("image", this.image || "");
+			form.append("category_id", this.post.category_id || "");
 
 			this.$inertia
-				.post("/posts", form)
+				.post(`/posts/${this.post.id}/update`, form)
 				.then(res => {
 					this.$refs.submitButton.stopLoading();
-					this.post = {};
 				})
 				.catch(() => {
 					this.$refs.submitButton.stopLoading();
+				});
+		},
+		deleteImage() {
+			this.$inertia
+				.post(`/posts/image/${this.post.id}/delete`)
+				.then(res => {
+					this.$refs.deleteImageBtn.stopLoading();
+				})
+				.catch(() => {
+					this.$refs.deleteImageBtn.stopLoading();
 				});
 		}
 	}
