@@ -23,21 +23,14 @@
 				</div>
 			</div>
 			<div class="hidden md:block">
-				<inertia-link
-					:class="isUrl('') ? 'text-blue-600 active' : ''"
-					class="px-4 mr-3 py-5 inline-block font-medium text-gray-500 hover:text-blue-600"
-					href="/"
-				>Dashboard</inertia-link>
-				<inertia-link
-					:class="isUrl('posts') ? 'text-blue-600 active' : ''"
-					class="px-4 mr-3 py-5 inline-block font-medium text-gray-500 hover:text-blue-600"
-					href="/posts"
-				>Posts</inertia-link>
-
 				<a
-					href="/posts"
+					href="#"
+					class="px-4 mr-3 py-5 inline-block font-medium active text-blue-600 hover:text-blue-600"
+				>Dashboard</a>
+				<a
+					href="#"
 					class="px-4 mr-3 py-5 inline-block font-medium text-gray-500 hover:text-blue-600"
-				>Posts</a>
+				>Invoices</a>
 				<a
 					href="#"
 					class="px-4 mr-3 py-5 inline-block font-medium text-gray-500 hover:text-blue-600"
@@ -48,8 +41,7 @@
 				<dropdown>
 					<template #trigger>
 						<div class="flex items-center">
-							<avatar :name="$page.auth.user.name" color="blue"></avatar>
-							<!-- <span
+							<span
 								class="outline-none block inline-flex items-center justify-center h-10 w-10 overflow-hidden rounded-full shadow-inner"
 							>
 								<img
@@ -57,7 +49,7 @@
 									alt
 									class="h-full w-full object-cover"
 								/>
-							</span>-->
+							</span>
 
 							<div class="text-left ml-3">
 								<span class="block leading-none">{{$page.auth.user.name}}</span>
@@ -128,12 +120,11 @@
 <script>
 import Dropdown from "@/Shared/tuis/Dropdown";
 import Alert from "@/Shared/tuis/Alert";
-import Avatar from "@/Shared/tuis/Avatar";
+
 export default {
 	components: {
 		Dropdown,
-		Alert,
-		Avatar
+		Alert
 	},
 	data() {
 		return {
@@ -160,15 +151,6 @@ export default {
 		},
 		showMessage() {
 			this.$snack.success(this.$page.flash.success);
-		},
-		isUrl(...urls) {
-			if (urls[0] === "") {
-				return location.pathname.substr(1) === "";
-			}
-
-			return urls.filter(url =>
-				location.pathname.substr(1).startsWith(url)
-			).length;
 		}
 	}
 };

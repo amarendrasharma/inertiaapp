@@ -17,7 +17,11 @@ class CreatePostsTable extends Migration
             $table->bigIncrements('id');
             $table->uuid('uuid');
             $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('user_id');
+            $table->index('user_id');
             $table->string('title');
+            $table->boolean('status')->default(0);
+            $table->timestamp('publish_at');
             $table->string('slug')->unique();
             $table->string('description');
             $table->string('image')->nullable();

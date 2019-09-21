@@ -1,7 +1,9 @@
 <template>
 	<layout>
-		<heading size="heading" class="mb-6">All Posts</heading>
-
+		<div class="flex items-center mb-6">
+			<heading size="heading" class="mr-3">All Posts</heading>
+			<loading-button size="small" @click="redirect('posts/create')">&plus; Create Post</loading-button>
+		</div>
 		<card :is-padding="false">
 			<template v-if="posts.length > 0">
 				<basic-table :headings="tableHeadings">
@@ -13,11 +15,27 @@
 						<td class="border-t">
 							<span class="text-gray-700 px-6 py-4 flex items-center focus:text-indigo">{{ post.title }}</span>
 						</td>
+
 						<td class="border-t">
 							<span
 								class="text-gray-700 px-6 py-4 flex items-center focus:text-indigo"
-							>{{ post.description }}</span>
+							>{{ post.user.name }}</span>
 						</td>
+
+						<td class="border-t">
+							<span
+								class="text-gray-700 px-6 py-4 flex items-center focus:text-indigo"
+							>{{ post.category.category_name }}</span>
+						</td>
+						<td class="border-t">
+							<span
+								class="text-gray-700 px-6 py-4 flex items-center focus:text-indigo"
+							>{{ post.publish_at_formated }}</span>
+						</td>
+						<td class="border-t">
+							<badge variant="warning">{{post.status == 0 ? "Pending" : ""}}</badge>
+						</td>
+
 						<td class="border-t text-center">
 							<inertia-link :href="`posts/${post.id}/edit`" class="text-blue-600 mr-3">Edit</inertia-link>
 							<inertia-link href="#" @click.prevent="showModal(post.id)" class="text-red-600">Delete</inertia-link>
@@ -59,6 +77,7 @@
 import Layout from "@/Shared/Layout";
 import Card from "@/Shared/tuis/Card";
 import Heading from "@/Shared/tuis/Heading";
+import Badge from "@/Shared/tuis/Badge";
 import BasicTable from "@/Shared/tuis/BasicTable";
 import LoadingButton from "@/Shared/tuis/LoadingButton";
 export default {
@@ -67,7 +86,8 @@ export default {
 		Card,
 		BasicTable,
 		Heading,
-		LoadingButton
+		LoadingButton,
+		Badge
 	},
 	props: ["posts"],
 	data() {
@@ -81,7 +101,22 @@ export default {
 					type: "text"
 				},
 				{
-					title: "Description",
+					title: "Created By",
+					align: "left",
+					type: "text"
+				},
+				{
+					title: "Category",
+					align: "left",
+					type: "text"
+				},
+				{
+					title: "Publish At",
+					align: "left",
+					type: "text"
+				},
+				{
+					title: "Status",
 					align: "left",
 					type: "text"
 				},

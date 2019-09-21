@@ -25,6 +25,8 @@
     },
     "dependencies": {
         "autosize": "^4.0.2",
+        "moment": "^2.24.0",
+        "pikaday": "^1.8.0",
         "vue-snack": "^0.1.4"
     }
 }

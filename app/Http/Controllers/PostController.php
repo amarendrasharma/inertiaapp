@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\{Post, Category};
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -12,7 +14,7 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::with(['category', 'user'])->get();
         return Inertia::render('Post/Index', compact('posts'));
     }
 
@@ -37,11 +39,13 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        // marie09@example.com ->admin
         $this->validate($request, [
             'title' => ['required', 'max:255'],
-            'description' => ['required', 'max:255'],
+            'description' => ['required'],
             'image' => ['required', 'image'],
-            'category_id' => ['required']
+            'category_id' => ['required'],
+            'publish_at' => ['required', 'date']
         ]);
         if ($request->file('image')) {
             $file_name = $request->file('image')->store('post');
@@ -51,15 +55,18 @@ class PostController extends Controller
         Post::create(
             [
                 'uuid' => Str::uuid(),
+                'user_id' => auth()->user()->id,
+                'publish_at' => $request->publish_at,
                 'title' => $request->title,
                 'slug' => Str::slug($request->title),
                 'category_id' => $request->category_id,
                 'image' => $file_name,
                 'description' => $request->description,
+                'publish_at' => $request->publish_at
             ]
         );
         session()->flash('success', 'Post is stored successfully');
-        return redirect()->back();
+        return redirect('/posts');
     }
 
 

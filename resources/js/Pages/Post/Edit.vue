@@ -1,6 +1,6 @@
 <template>
 	<layout>
-		{{post}}
+		<inertia-link href="/posts" class="text-lg text-gray-600 mb-4 inline-block">Back</inertia-link>
 		<card with-footer>
 			<text-input
 				v-model="post.title"
@@ -27,7 +27,9 @@
 				@keydown="delete errors.description"
 			></textarea-input>
 			<template v-if="post.image">
-				<img :src="post.image_full_path" />
+				<div class="w-64 h-auto bg-gray-100 rounded-lg mb-2">
+					<img :src="post.image_full_path" class="rounded-lg object-fill" />
+				</div>
 				<loading-button ref="deleteImageBtn" @click.prevent="deleteImage" variant="danger">Delete Image</loading-button>
 			</template>
 			<template v-else>

@@ -14,7 +14,7 @@ class CategoriesTableSeeder extends Seeder
     public function run()
     {
         DB::table('categories')->insert([
-            'category_name' => 'News',
+            'category_name' => 'Movie',
             'uuid' => Str::uuid()
         ]);
     }

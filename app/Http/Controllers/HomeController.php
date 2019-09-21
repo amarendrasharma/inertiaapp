@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Post;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,7 +15,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     /**
@@ -24,6 +25,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Welcome');
+        // return Inertia::render('Welcome');
+        $posts = Post::with('category')->get();
+        return Inertia::render('Home', compact('posts'));
     }
 }
