@@ -23,30 +23,34 @@
 				</div>
 			</div>
 			<div class="hidden md:block">
-				<inertia-link
-					:class="isUrl('') ? 'text-blue-600 active' : ''"
-					class="px-4 mr-3 py-5 inline-block font-medium text-gray-500 hover:text-blue-600"
-					href="/"
-				>Dashboard</inertia-link>
-				<inertia-link
-					:class="isUrl('posts') ? 'text-blue-600 active' : ''"
-					class="px-4 mr-3 py-5 inline-block font-medium text-gray-500 hover:text-blue-600"
-					href="/posts"
-				>Posts</inertia-link>
-
-				<a
-					href="/posts"
-					class="px-4 mr-3 py-5 inline-block font-medium text-gray-500 hover:text-blue-600"
-				>Posts</a>
-				<a
-					href="#"
-					class="px-4 mr-3 py-5 inline-block font-medium text-gray-500 hover:text-blue-600"
-				>Investments</a>
-				<a href="#" class="px-4 py-5 inline-block font-medium text-gray-500 hover:text-blue-600">Notices</a>
+				<template v-if="$page.auth.user != null ">
+					<inertia-link
+						:class="isUrl('') ? 'text-blue-600 active' : ''"
+						class="px-4 mr-3 py-5 inline-block font-medium text-gray-500 hover:text-blue-600"
+						href="/"
+					>Home</inertia-link>
+					<inertia-link
+						:class="isUrl('posts') ? 'text-blue-600 active' : ''"
+						class="px-4 mr-3 py-5 inline-block font-medium text-gray-500 hover:text-blue-600"
+						href="/posts"
+					>{{$page.auth.user.role === 'admin' ? 'Posts' : "My Posts"}}</inertia-link>
+				</template>
+				<template v-else>
+					<inertia-link
+						:class="isUrl('') ? 'text-blue-600 active' : ''"
+						class="px-4 mr-3 py-5 inline-block font-medium text-gray-500 hover:text-blue-600"
+						href="/"
+					>Home</inertia-link>
+					<inertia-link
+						:class="isUrl('/login') ? 'text-blue-600 active' : ''"
+						class="px-4 mr-3 py-5 inline-block font-medium text-gray-500 hover:text-blue-600"
+						href="/login"
+					>Login</inertia-link>
+				</template>
 			</div>
 			<div class="hidden md:block">
 				<dropdown>
-					<template #trigger>
+					<template #trigger v-if="$page.auth.user != null">
 						<div class="flex items-center">
 							<avatar :name="$page.auth.user.name" color="blue"></avatar>
 							<!-- <span

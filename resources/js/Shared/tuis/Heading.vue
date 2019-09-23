@@ -1,21 +1,7 @@
 <template>
-	<div>
-		<p :class="cssClasses" v-if="tag == 'p'">
-			<slot></slot>
-		</p>
-		<h1 :class="cssClasses" v-if="tag == 'h1'">
-			<slot></slot>
-		</h1>
-		<h2 :class="cssClasses" v-if="tag == 'h2'">
-			<slot></slot>
-		</h2>
-		<h3 :class="cssClasses" v-if="tag == 'h3'">
-			<slot></slot>
-		</h3>
-		<h4 :class="cssClasses" v-if="tag == 'h4'">
-			<slot></slot>
-		</h4>
-	</div>
+	<component :is="tag" :class="cssClasses" :href="to">
+		<slot></slot>
+	</component>
 </template>
 
 <script>
@@ -32,6 +18,9 @@ export default {
 		color: {
 			type: String,
 			default: ""
+		},
+		to: {
+			type: String
 		}
 	},
 

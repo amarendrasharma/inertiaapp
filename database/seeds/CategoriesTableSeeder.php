@@ -1,5 +1,6 @@
 <?php
 
+use App\Category;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -13,9 +14,15 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('categories')->insert([
-            'category_name' => 'Movie',
-            'uuid' => Str::uuid()
-        ]);
+        DB::table('categories')->delete();
+        $categories = ['Movie', 'IT', "Politics", "Market", "Games"];
+        foreach ($categories as $category) {
+            DB::table('categories')->insert(
+                [
+                    'category_name' => $category,
+                    'uuid' => Str::uuid()
+                ],
+            );
+        }
     }
 }

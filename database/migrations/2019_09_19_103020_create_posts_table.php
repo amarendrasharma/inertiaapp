@@ -20,10 +20,10 @@ class CreatePostsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->index('user_id');
             $table->string('title');
-            $table->boolean('status')->default(0);
+            $table->string('status')->default('pending');
             $table->timestamp('publish_at');
             $table->string('slug')->unique();
-            $table->string('description');
+            $table->text('description');
             $table->string('image')->nullable();
             $table->timestamps();
         });

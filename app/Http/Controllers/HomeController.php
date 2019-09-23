@@ -25,8 +25,9 @@ class HomeController extends Controller
      */
     public function index()
     {
+        return redirect('/');
         // return Inertia::render('Welcome');
-        $posts = Post::with('category')->get();
-        return Inertia::render('Home', compact('posts'));
+        // $posts = Post::with('category')->get();
+        // return Inertia::render('Home', compact('posts'));
     }
 }

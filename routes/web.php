@@ -30,7 +30,7 @@ Route::post('/posts/image/{post}/delete', 'PostController@imageDelete');
 
 
 Route::get('/home', function () {
-    return Inertia::render('Home');
+    return redirect('/');
 });
 Auth::routes();
 

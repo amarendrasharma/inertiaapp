@@ -19,24 +19,37 @@
 			>
 				<option value="null" disabled>Select a category</option>
 			</select-input>
-			<textarea-input
+			<!-- <textarea-input
 				v-model="post.description"
 				class="mb-4"
 				label="Description"
 				:errors="errors.description"
 				@keydown="delete errors.description"
-			></textarea-input>
+			></textarea-input>-->
+
+			<simple-editor
+				v-model="post.description"
+				:errors="errors.description"
+				@keydown="delete errors.description"
+				label="Description"
+				class="mb-10"
+			></simple-editor>
 			<template v-if="post.image">
 				<div class="w-64 h-auto bg-gray-100 rounded-lg mb-2">
 					<img :src="post.image_full_path" class="rounded-lg object-fill" />
 				</div>
-				<loading-button ref="deleteImageBtn" @click.prevent="deleteImage" variant="danger">Delete Image</loading-button>
+				<loading-button
+					ref="deleteImageBtn"
+					size="small"
+					@click.prevent="deleteImage"
+					variant="danger"
+				>Delete Image</loading-button>
 			</template>
 			<template v-else>
 				<file-input v-model="image" label="Post Image" :errors="errors.image"></file-input>
 			</template>
 			<template #footer>
-				<loading-button ref="submitButton" @click="postCreate">Save Article</loading-button>
+				<loading-button ref="submitButton" @click="postCreate">Update Article</loading-button>
 			</template>
 		</card>
 	</layout>
@@ -45,6 +58,7 @@
 import Layout from "@/Shared/Layout";
 import Card from "@/Shared/tuis/Card";
 import TextInput from "@/Shared/tuis/TextInput";
+import SimpleEditor from "@/Shared/tuis/SimpleEditor.vue";
 import TextareaInput from "@/Shared/tuis/TextareaInput";
 import FileInput from "@/Shared/tuis/FileInput";
 import SelectInput from "@/Shared/tuis/SelectInput";
@@ -57,7 +71,8 @@ export default {
 		FileInput,
 		TextareaInput,
 		LoadingButton,
-		SelectInput
+		SelectInput,
+		SimpleEditor
 	},
 	props: ["errors", "categories", "post"],
 	data() {

@@ -1,13 +1,18 @@
 <template>
 	<layout>
 		<div class="max-w-5xl mx-auto px-4 py-10">
-			<card v-for="post in posts" :key="post.uuid" class="mb-10">
+			<card v-for="post in posts" :key="post.uuid" class="mb-10" :is-padding="false">
 				<div class="flex">
-					<div class="w-64 mr-5 rounded-lg bg-gray-100">
-						<img :src="post.image_full_path" class="object-cover rounded-lg" />
+					<div class="w-64 mr-5 bg-gray-200 flex-shrink-0">
+						<img :src="post.image_full_path" class="object-cover" />
 					</div>
-					<div>
-						<heading size="heading" class="mb-2">{{post.title}}</heading>
+					<div class="p-6">
+						<heading
+							size="heading"
+							:to="`/${post.slug}`"
+							tag="a"
+							class="mb-4 block hover:text-blue-600"
+						>{{post.title}}</heading>
 						<heading class="mb-6">{{post.description}}</heading>
 						<div class="flex items-center">
 							<div class="flex items-center">

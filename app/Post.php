@@ -30,17 +30,21 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
-
     public function toArray()
     {
         return parent::toArray() + [
             'summary' => Str::limit($this->description, 100),
             'image_full_path' =>   $this->image != null  ?  url('/storage/' . $this->image) : null,
-            'publish_at_formated' => $this->publish_at->format('d/M/Y'),
+            'publish_at_formated' => $this->publish_at->format('d/m/Y'),
             'can' => [
                 'update' => Gate::denies('edit-post', $this),
                 'delete' => Gate::denies('edit-post', $this),
-            ]
+            ],
+            'links' => [
+                'single' => url($this->slug),
+                'category' => url('category/' . $this->category_id)
+            ],
+            'display_title' => Str::limit($this->title, 40),
         ];
     }
 }

@@ -28,13 +28,20 @@
 				v-model="post.publishAt"
 				readonly
 			></date-input>
-			<textarea-input
+			<!-- <textarea-input
 				v-model="post.description"
 				class="mb-4"
 				label="Description"
 				:errors="errors.description"
 				@keydown="delete errors.description"
-			></textarea-input>
+			></textarea-input>-->
+			<simple-editor
+				v-model="post.description"
+				:errors="errors.description"
+				@keydown="delete errors.description"
+				label="Description"
+				class="mb-4"
+			></simple-editor>
 			<file-input v-model="post.image" label="Post Image" :errors="errors.image"></file-input>
 			<template #footer>
 				<loading-button ref="submitButton" @click="postCreate">Save Article</loading-button>
@@ -45,6 +52,7 @@
 <script>
 import Layout from "@/Shared/Layout";
 import Card from "@/Shared/tuis/Card";
+import SimpleEditor from "@/Shared/tuis/SimpleEditor.vue";
 import TextInput from "@/Shared/tuis/TextInput";
 import TextareaInput from "@/Shared/tuis/TextareaInput";
 import FileInput from "@/Shared/tuis/FileInput";
@@ -60,7 +68,8 @@ export default {
 		TextareaInput,
 		LoadingButton,
 		SelectInput,
-		DateInput
+		DateInput,
+		SimpleEditor
 	},
 	props: ["errors", "categories"],
 	data() {

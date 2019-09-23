@@ -14,7 +14,14 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = Post::with(['category', 'user'])->get();
+
+        if (auth()->user()->isUser()) {
+            $posts = Post::where('user_id', auth()->user()->id)->with(['category', 'user'])->simplePaginate(2);
+            return Inertia::render('Post/Index', compact('posts'));
+        }
+
+        $posts = Post::with(['category', 'user'])->simplePaginate(3);
+
         return Inertia::render('Post/Index', compact('posts'));
     }
 
@@ -31,12 +38,7 @@ class PostController extends Controller
         return Inertia::render('Post/Create', compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         // marie09@example.com ->admin

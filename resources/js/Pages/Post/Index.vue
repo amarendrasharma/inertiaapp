@@ -5,15 +5,17 @@
 			<loading-button size="small" @click="redirect('posts/create')">&plus; Create Post</loading-button>
 		</div>
 		<card :is-padding="false">
-			<template v-if="posts.length > 0">
+			<template v-if="posts.data.length > 0">
 				<basic-table :headings="tableHeadings">
 					<tr
-						v-for="(post, postIndex) in posts"
+						v-for="(post, postIndex) in posts.data"
 						:key="postIndex"
 						class="hover:bg-grey-lightest focus-within:bg-grey-lightest"
 					>
 						<td class="border-t">
-							<span class="text-gray-700 px-6 py-4 flex items-center focus:text-indigo">{{ post.title }}</span>
+							<span
+								class="text-gray-700 px-6 py-4 flex items-center focus:text-indigo"
+							>{{ post.display_title }}</span>
 						</td>
 
 						<td class="border-t">
@@ -33,7 +35,7 @@
 							>{{ post.publish_at_formated }}</span>
 						</td>
 						<td class="border-t">
-							<badge variant="warning">{{post.status == 0 ? "Pending" : ""}}</badge>
+							<badge variant="warning" class="uppercase">{{post.status}}</badge>
 						</td>
 
 						<td class="border-t text-center">
@@ -50,6 +52,10 @@
 				</div>
 			</template>
 		</card>
+		<div class="my-4 flex justify-between">
+			<a :href="posts.prev_page_url">Prev</a>
+			<a :href="posts.next_page_url">Next</a>
+		</div>
 		<div class>
 			<div
 				class="absolute w-ful h-full top-0 bottom-0 left-0 right-0"
