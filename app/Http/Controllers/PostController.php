@@ -42,18 +42,27 @@ class PostController extends Controller
     public function store(Request $request)
     {
         // marie09@example.com ->admin
+        $request['slug'] = Str::slug($request->title);
         $this->validate($request, [
             'title' => ['required', 'max:255'],
             'description' => ['required'],
             'image' => ['required', 'image'],
             'category_id' => ['required'],
-            'publish_at' => ['required', 'date']
+            'publish_at' => ['required', 'date'],
+            'slug' => ['required_if:title', 'unique:posts']
         ]);
+
         if ($request->file('image')) {
             $file_name = $request->file('image')->store('post');
         } else {
             $file_name = null;
         }
+        $request['slug'] = Str::slug($request->title);
+        Validation::$slug_unique =  $this->validate($request['title'], [
+            'slug' => ['required', 'unique']
+        ]);
+
+
         Post::create(
             [
                 'uuid' => Str::uuid(),
@@ -72,9 +81,10 @@ class PostController extends Controller
     }
 
 
-    public function show(Post $post)
+    public function show($slug)
     {
-        //
+        $post = Post::where('slug', $slug)->with(['category', 'user'])->first();
+        return Inertia::render('Post/Show', compact('post'));
     }
 
     public function edit(Post $post)

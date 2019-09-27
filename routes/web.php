@@ -23,10 +23,13 @@ Route::post('/logout', function () {
 Route::get('/posts', 'PostController@index');
 Route::get('/posts/create', 'PostController@create');
 Route::post('/posts', 'PostController@store');
+// Route::get('/posts/{slug}', 'PostController@show');
 Route::get('/posts/{post}/edit', 'PostController@edit')->middleware('can:edit-post,post');
 Route::post('/posts/{post}/update', 'PostController@update')->middleware('can:edit-post,post');
 Route::delete('/posts/{post}/delete', 'PostController@destroy')->middleware('can:edit-post,post');
 Route::post('/posts/image/{post}/delete', 'PostController@imageDelete');
+
+Route::get('{slug}', 'FrontController@show')->where('slug', '[a-z0-9]+(-?[a-z0-9]+)*');
 
 
 Route::get('/home', function () {
